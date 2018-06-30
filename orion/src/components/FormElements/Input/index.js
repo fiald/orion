@@ -1,42 +1,41 @@
-import React, { Component } from 'react'
+import React from 'react'
 //  libs
-import { connect } from 'react-redux'
+import { Field } from 'redux-form'
 import { string } from 'prop-types'
 
-class Input extends Component {
-  static propTypes = {
-    name: string,
-    placeholder: string,
-    type: string,
-    id: string,
-    label: string
-  }
+const Input =  ({ input, meta: { touched, error }, name, placeholder, type, id, label, script }) => {
+  const className = (touched && error) ? 'error' : ''
 
-  static defaultProps = {
-    type: 'text'
-  }
-
-  onChange = (e) => {
-    console.log(e.target.value)
-  }
-
-  render () {
-    const { name, placeholder, type, id, label, required } = this.props
-    return (
-      <div>
+  return (
+    <div className='row'>
+      <div className='flex'>
+        <i>{script}</i>
         <label htmlFor={id}>{label || placeholder}</label>
-        <input
-          onChange={this.onChange}
-          name={name}
-          placeholder={placeholder}
-          id={id}
-          type={type}
-          className="validate"
-          required={required}
-        />
       </div>
-    )
-  }
+      <input
+        name={name}
+        className={className}
+        placeholder={placeholder}
+        type={type}
+        id={id}
+        {...input}
+      />
+      {touched && (error && <span className='error-container'>{error}</span>)}
+    </div>
+  )
 }
 
-export default connect(null)(Input)
+Input.propTypes = {
+  name: string,
+  placeholder: string,
+  type: string,
+  id: string,
+  label: string,
+  script: string
+}
+
+Input.defaultProps = {
+  type: 'text'
+}
+
+export default (props) => <Field {...props} component={Input} />

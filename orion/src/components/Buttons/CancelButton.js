@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 //  libs
 import { func } from 'prop-types'
 import { connect } from 'react-redux'
+//  components
+import Button from '../FormElements/Button'
 //  actions
 import { handleChangeModal } from '../../actions'
 //  context
@@ -19,9 +21,11 @@ class CancelButton extends Component {
 
   render () {
     return (
-      <button onClick={this.onClick} className="waves-effect waves-teal btn-flat">
-        Отменить заявку
-      </button>
+      <Button
+        textContent='Отменить заявку'
+        onClick={this.onClick}
+        className="waves-effect waves-teal btn-flat"
+      />
     )
   }
 }

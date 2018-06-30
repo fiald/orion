@@ -1,1 +1,3 @@
 export const HANDLE_CHANGE_MODAL = 'HANDLE_CHANGE_MODAL'
+export const GET_SERVICES = 'GET_SERVICES'
+export const SUBMIT = 'SUBMIT'

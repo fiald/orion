@@ -1,30 +1,45 @@
-import React, { Component } from 'react'
+import React from 'react'
 //  libs
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-import { Provider } from 'react-redux'
+import { Route } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { object, array, bool, oneOfType } from 'prop-types'
 //  components
-import ClientInfoForm from './components/ClientInfoForm'
-import MainLayout from './layout/MainLayout'
-//  store
-import store from './store'
+import Navbar from './layout/Navbar'
+import CancelRequestModal from './components/Modals/CancelRequestModal'
+import SuccessModal from './components/Modals/SuccessModal'
+import ClientInfoStep from './components/ClientInfoStep'
+import ServicesStep from './components/ServicesStep'
+import ConfirmStep from './components/ConfirmStep'
+//  utils
+import get from 'lodash/get'
 //  styles
 import './App.css'
 
-class App extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <Router>
-          <div>
-            <Route exact path='/' />
-            <MainLayout>
-              <Route exact path='/form' component={ClientInfoForm} />
-            </MainLayout>
-          </div>
-        </Router>
-      </Provider>
-    )
-  }
+const App = ({ servicesData, formData }) => (
+  <main>
+    <Navbar withServiceLink={servicesData} withConfirmLink={get(formData, 'values.service', false)} />
+    <div className='container'>
+      <Route exact path='/' component={ClientInfoStep} />
+      {servicesData &&
+        <div>
+          <Route exact path='/services' component={ServicesStep} />
+          <Route exact path='/confirm' component={ConfirmStep} />
+        </div>
+      }
+    </div>
+    <CancelRequestModal />
+    <SuccessModal />
+  </main>
+)
+
+App.propTypes = {
+  servicesData: oneOfType([ array, bool ]),
+  formData: object
 }
 
-export default App
+const mapStateToProps = ({ servicesData, form }) => ({
+  servicesData: servicesData.data,
+  formData: form.applicationForm
+})
+
+export default connect(mapStateToProps, null)(App)
